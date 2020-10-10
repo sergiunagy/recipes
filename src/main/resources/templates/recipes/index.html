@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Spring Framework Guru</title>
+</head>
+<body>
+<h1>Recipes List</h1>
+
+<table id="recipes" class="table table-striped">
+    <tr>
+        <th>Recipe</th>
+        <th>Difficulty</th>
+        <th>Servings</th>
+        <th>PrepTime</th>
+        <th>Directions</th>
+    </tr>
+    <tr th:each="recipe : ${recipes}">
+        <td th:text="${recipe.description}">123</td>
+        <td th:text="${recipe.difficulty}">123</td>
+        <td th:text="${recipe.servings}">123</td>
+        <td th:text="${recipe.prepTime}">123</td>
+        <td th:text="${recipe.directions}"> Spring in Action</td>
+    </tr>
+</table>
