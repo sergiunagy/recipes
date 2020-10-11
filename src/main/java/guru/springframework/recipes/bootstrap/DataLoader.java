@@ -58,20 +58,19 @@ https://stackoverflow.com/questions/54265552/different-ways-to-run-custom-code-b
         guacamole.getCategories().add(mexican);
 
         /*Add Ingredients to Recipe*/
-        guacamole.getIngredients().add(new Ingredient("Ripe avocado", BigDecimal.valueOf(2), piece, guacamole));
-        guacamole.getIngredients().add(new Ingredient("Salt", BigDecimal.valueOf(0.25), tsp, guacamole));
-        guacamole.getIngredients().add(new Ingredient("Lime juice", BigDecimal.valueOf(1),tbsp, guacamole));
-        guacamole.getIngredients().add(new Ingredient("Minced onion", BigDecimal.valueOf(2.25), tbsp, guacamole));
-        guacamole.getIngredients().add(new Ingredient("serrano chilles", BigDecimal.valueOf(2), piece, guacamole));
-        guacamole.getIngredients().add(new Ingredient("minced cilantro", BigDecimal.valueOf(2), tbsp, guacamole));
-        guacamole.getIngredients().add(new Ingredient("freshly grated black pepper", BigDecimal.valueOf(1), dash, guacamole));
+        guacamole.addIngredient(new Ingredient("Ripe avocado", BigDecimal.valueOf(2), piece));
+        guacamole.addIngredient(new Ingredient("Salt", BigDecimal.valueOf(0.25), tsp ));
+        guacamole.addIngredient(new Ingredient("Lime juice", BigDecimal.valueOf(1),tbsp ));
+        guacamole.addIngredient(new Ingredient("Minced onion", BigDecimal.valueOf(2.25), tbsp ));
+        guacamole.addIngredient(new Ingredient("serrano chilles", BigDecimal.valueOf(2), piece ));
+        guacamole.addIngredient(new Ingredient("minced cilantro", BigDecimal.valueOf(2), tbsp ));
+        guacamole.addIngredient(new Ingredient("freshly grated black pepper", BigDecimal.valueOf(1), dash ));
 
         /*Add notes*/
         Notes note_guac = new Notes();
         note_guac.setRecipeNotes("Be careful handling chiles if using. \n" +
                 "Wash your hands thoroughly after handling and do not touch your eyes or the area near your eyes with your hands for several hours.");
         guacamole.setNotes(note_guac);
-        note_guac.setRecipe(guacamole);
 
         /*persist the recipe*/
         recipeRepository.save(guacamole);
@@ -82,16 +81,16 @@ https://stackoverflow.com/questions/54265552/different-ways-to-run-custom-code-b
         spicy_grill_chicken.getCategories().add(american);
 
         /*Add Ingredients to Recipe*/
-        spicy_grill_chicken.getIngredients().add(new Ingredient("ancho chili powder", BigDecimal.valueOf(2), tbsp, spicy_grill_chicken));
-        spicy_grill_chicken.getIngredients().add(new Ingredient("dried oregano", BigDecimal.valueOf(1), tsp, spicy_grill_chicken));
-        spicy_grill_chicken.getIngredients().add(new Ingredient("dried cumin", BigDecimal.valueOf(1), tsp, spicy_grill_chicken));
-        spicy_grill_chicken.getIngredients().add(new Ingredient("sugar", BigDecimal.valueOf(1), tsp, spicy_grill_chicken));
-        spicy_grill_chicken.getIngredients().add(new Ingredient("salt", BigDecimal.valueOf(0.5), tsp, spicy_grill_chicken));
-        spicy_grill_chicken.getIngredients().add(new Ingredient("clove garlic", BigDecimal.valueOf(1), tsp, spicy_grill_chicken));
-        spicy_grill_chicken.getIngredients().add(new Ingredient("finely grated orange zest", BigDecimal.valueOf(1), tsp, spicy_grill_chicken));
-        spicy_grill_chicken.getIngredients().add(new Ingredient("fresh-squeezed orange juice", BigDecimal.valueOf(3), tbsp, spicy_grill_chicken));
-        spicy_grill_chicken.getIngredients().add(new Ingredient("olive oil", BigDecimal.valueOf(2), tbsp, spicy_grill_chicken));
-        spicy_grill_chicken.getIngredients().add(new Ingredient("boneless chicken thighs", BigDecimal.valueOf(6), piece, spicy_grill_chicken));
+        spicy_grill_chicken.addIngredient(new Ingredient("ancho chili powder", BigDecimal.valueOf(2), tbsp  ));
+        spicy_grill_chicken.addIngredient(new Ingredient("dried oregano", BigDecimal.valueOf(1), tsp  ));
+        spicy_grill_chicken.addIngredient(new Ingredient("dried cumin", BigDecimal.valueOf(1), tsp  ));
+        spicy_grill_chicken.addIngredient(new Ingredient("sugar", BigDecimal.valueOf(1), tsp  ));
+        spicy_grill_chicken.addIngredient(new Ingredient("salt", BigDecimal.valueOf(0.5), tsp  ));
+        spicy_grill_chicken.addIngredient(new Ingredient("clove garlic", BigDecimal.valueOf(1), tsp  ));
+        spicy_grill_chicken.addIngredient(new Ingredient("finely grated orange zest", BigDecimal.valueOf(1), tsp  ));
+        spicy_grill_chicken.addIngredient(new Ingredient("fresh-squeezed orange juice", BigDecimal.valueOf(3), tbsp  ));
+        spicy_grill_chicken.addIngredient(new Ingredient("olive oil", BigDecimal.valueOf(2), tbsp  ));
+        spicy_grill_chicken.addIngredient(new Ingredient("boneless chicken thighs", BigDecimal.valueOf(6), piece  ));
 
         /*Add notes*/
         Notes note_chick = new Notes();
@@ -99,7 +98,7 @@ https://stackoverflow.com/questions/54265552/different-ways-to-run-custom-code-b
                 "(If you can't find ancho chili powder, you replace the ancho chili, the oregano, and the cumin with 2 1/2 tablespoons regular chili powder, " +
                 "though the flavor won't be quite the same.)");
         spicy_grill_chicken.setNotes(note_chick);
-        note_chick.setRecipe(spicy_grill_chicken);
+
         /*persist the recipe*/
         recipeRepository.save(spicy_grill_chicken);
 
