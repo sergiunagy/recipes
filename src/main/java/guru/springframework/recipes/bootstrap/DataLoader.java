@@ -4,12 +4,15 @@ import guru.springframework.recipes.domain.*;
 import guru.springframework.recipes.domain.repositories.CategoryRepository;
 import guru.springframework.recipes.domain.repositories.RecipeRepository;
 import guru.springframework.recipes.domain.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
 
+@Slf4j
 @Component
 public class DataLoader implements CommandLineRunner {
 
@@ -24,6 +27,7 @@ public class DataLoader implements CommandLineRunner {
     }
 
     @Override
+    @Transactional
     public void run(String... args) throws Exception {
         if(recipeRepository.findAll().size()==0){
            loadData();
@@ -37,10 +41,10 @@ https://stackoverflow.com/questions/54265552/different-ways-to-run-custom-code-b
 * x - implement no-arg and argument constructor for Ingredients
 * - set up reverse binding for entities*/
 
-
     private void loadData(){
-        System.out.println("Bootstrapping data..");
 
+        System.out.println("Bootstrapping data..");
+        log.debug("Starting bootstrapping ");
         /*Get and check ingredients*/
         UnitOfMeasure piece = getUnit("Piece");
         UnitOfMeasure tsp = getUnit("Teaspoon");
@@ -74,6 +78,8 @@ https://stackoverflow.com/questions/54265552/different-ways-to-run-custom-code-b
 
         /*persist the recipe*/
         recipeRepository.save(guacamole);
+        log.debug("Saving recipe: " + guacamole.toString());
+
 
         /*********** create Recipe 2 *************************************/
         Recipe spicy_grill_chicken = getSpicyGrilledChickenRecipe();
@@ -99,6 +105,7 @@ https://stackoverflow.com/questions/54265552/different-ways-to-run-custom-code-b
                 "though the flavor won't be quite the same.)");
         spicy_grill_chicken.setNotes(note_chick);
 
+//        log.debug("Saving recipe: " + guacamole.toString());
         /*persist the recipe*/
         recipeRepository.save(spicy_grill_chicken);
 
