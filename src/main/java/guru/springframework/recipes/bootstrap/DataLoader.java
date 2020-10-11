@@ -26,32 +26,52 @@ public class DataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if(recipeRepository.findAll().size()==0){
-            loadData();
+           loadData();
         }
     }
+/*Comments:
+* - uom are loaded at startup and each is checked if it exists
+* - same with Categories
+* - uses a different interface on the DataLoader class: ApplicationListener<ContextRefreshedEvent>
+https://stackoverflow.com/questions/54265552/different-ways-to-run-custom-code-before-the-application-starts
+* x - implement no-arg and argument constructor for Ingredients
+* - set up reverse binding for entities*/
+
 
     private void loadData(){
         System.out.println("Bootstrapping data..");
 
+        /*Get and check ingredients*/
+        UnitOfMeasure piece = getUnit("Piece");
+        UnitOfMeasure tsp = getUnit("Teaspoon");
+        UnitOfMeasure tbsp = getUnit("Tablespoon");
+        UnitOfMeasure dash = getUnit("Dash");
+        UnitOfMeasure cup = getUnit("Cup");
+
+        /*Get categories*/
+        Category american = getCategory("American");
+        Category mexican = getCategory("Mexican");
+
         /*********** create Recipe 1 *************************************/
         Recipe guacamole = getGuacamoleRecipe();
         /*Add category to recipe*/
-        guacamole.getCategories().add(categoryRepository.findByDescription("Mexican").get());
+        guacamole.getCategories().add(mexican);
 
         /*Add Ingredients to Recipe*/
-        guacamole.getIngredients().add(getIngredient("Ripe avocado", BigDecimal.valueOf(2), "Piece"));
-        guacamole.getIngredients().add(getIngredient("Salt", BigDecimal.valueOf(0.25), "Teaspoon"));
-        guacamole.getIngredients().add(getIngredient("Lime juice", BigDecimal.valueOf(1), "Tablespoon"));
-        guacamole.getIngredients().add(getIngredient("Minced onion", BigDecimal.valueOf(2.25), "Tablespoon"));
-        guacamole.getIngredients().add(getIngredient("serrano chilles", BigDecimal.valueOf(2), "Piece"));
-        guacamole.getIngredients().add(getIngredient("minced cilantro", BigDecimal.valueOf(2), "Tablespoon"));
-        guacamole.getIngredients().add(getIngredient("freshly grated black pepper", BigDecimal.valueOf(1), "Dash"));
+        guacamole.getIngredients().add(new Ingredient("Ripe avocado", BigDecimal.valueOf(2), piece, guacamole));
+        guacamole.getIngredients().add(new Ingredient("Salt", BigDecimal.valueOf(0.25), tsp, guacamole));
+        guacamole.getIngredients().add(new Ingredient("Lime juice", BigDecimal.valueOf(1),tbsp, guacamole));
+        guacamole.getIngredients().add(new Ingredient("Minced onion", BigDecimal.valueOf(2.25), tbsp, guacamole));
+        guacamole.getIngredients().add(new Ingredient("serrano chilles", BigDecimal.valueOf(2), piece, guacamole));
+        guacamole.getIngredients().add(new Ingredient("minced cilantro", BigDecimal.valueOf(2), tbsp, guacamole));
+        guacamole.getIngredients().add(new Ingredient("freshly grated black pepper", BigDecimal.valueOf(1), dash, guacamole));
 
         /*Add notes*/
         Notes note_guac = new Notes();
         note_guac.setRecipeNotes("Be careful handling chiles if using. \n" +
                 "Wash your hands thoroughly after handling and do not touch your eyes or the area near your eyes with your hands for several hours.");
         guacamole.setNotes(note_guac);
+        note_guac.setRecipe(guacamole);
 
         /*persist the recipe*/
         recipeRepository.save(guacamole);
@@ -59,19 +79,19 @@ public class DataLoader implements CommandLineRunner {
         /*********** create Recipe 2 *************************************/
         Recipe spicy_grill_chicken = getSpicyGrilledChickenRecipe();
         /*Add category to recipe*/
-        spicy_grill_chicken.getCategories().add(categoryRepository.findByDescription("American").get());
+        spicy_grill_chicken.getCategories().add(american);
 
         /*Add Ingredients to Recipe*/
-        spicy_grill_chicken.getIngredients().add(getIngredient("ancho chili powder", BigDecimal.valueOf(2), "Tablespoon"));
-        spicy_grill_chicken.getIngredients().add(getIngredient("dried oregano", BigDecimal.valueOf(1), "Teaspoon"));
-        spicy_grill_chicken.getIngredients().add(getIngredient("dried cumin", BigDecimal.valueOf(1), "Teaspoon"));
-        spicy_grill_chicken.getIngredients().add(getIngredient("sugar", BigDecimal.valueOf(1), "Teaspoon"));
-        spicy_grill_chicken.getIngredients().add(getIngredient("salt", BigDecimal.valueOf(0.5), "Teaspoon"));
-        spicy_grill_chicken.getIngredients().add(getIngredient("clove garlic", BigDecimal.valueOf(1), "Tablespoon"));
-        spicy_grill_chicken.getIngredients().add(getIngredient("finely grated orange zest", BigDecimal.valueOf(1), "Tablespoon"));
-        spicy_grill_chicken.getIngredients().add(getIngredient("fresh-squeezed orange juice", BigDecimal.valueOf(3), "Tablespoon"));
-        spicy_grill_chicken.getIngredients().add(getIngredient("olive oil", BigDecimal.valueOf(2), "Tablespoon"));
-        spicy_grill_chicken.getIngredients().add(getIngredient("boneless chicken thighs", BigDecimal.valueOf(6), "Piece"));
+        spicy_grill_chicken.getIngredients().add(new Ingredient("ancho chili powder", BigDecimal.valueOf(2), tbsp, spicy_grill_chicken));
+        spicy_grill_chicken.getIngredients().add(new Ingredient("dried oregano", BigDecimal.valueOf(1), tsp, spicy_grill_chicken));
+        spicy_grill_chicken.getIngredients().add(new Ingredient("dried cumin", BigDecimal.valueOf(1), tsp, spicy_grill_chicken));
+        spicy_grill_chicken.getIngredients().add(new Ingredient("sugar", BigDecimal.valueOf(1), tsp, spicy_grill_chicken));
+        spicy_grill_chicken.getIngredients().add(new Ingredient("salt", BigDecimal.valueOf(0.5), tsp, spicy_grill_chicken));
+        spicy_grill_chicken.getIngredients().add(new Ingredient("clove garlic", BigDecimal.valueOf(1), tsp, spicy_grill_chicken));
+        spicy_grill_chicken.getIngredients().add(new Ingredient("finely grated orange zest", BigDecimal.valueOf(1), tsp, spicy_grill_chicken));
+        spicy_grill_chicken.getIngredients().add(new Ingredient("fresh-squeezed orange juice", BigDecimal.valueOf(3), tbsp, spicy_grill_chicken));
+        spicy_grill_chicken.getIngredients().add(new Ingredient("olive oil", BigDecimal.valueOf(2), tbsp, spicy_grill_chicken));
+        spicy_grill_chicken.getIngredients().add(new Ingredient("boneless chicken thighs", BigDecimal.valueOf(6), piece, spicy_grill_chicken));
 
         /*Add notes*/
         Notes note_chick = new Notes();
@@ -79,10 +99,27 @@ public class DataLoader implements CommandLineRunner {
                 "(If you can't find ancho chili powder, you replace the ancho chili, the oregano, and the cumin with 2 1/2 tablespoons regular chili powder, " +
                 "though the flavor won't be quite the same.)");
         spicy_grill_chicken.setNotes(note_chick);
-
+        note_chick.setRecipe(spicy_grill_chicken);
         /*persist the recipe*/
         recipeRepository.save(spicy_grill_chicken);
 
+    }
+
+    private Category getCategory(String category) {
+
+        Optional<Category> cat = categoryRepository.findByDescription(category);
+        if(!cat.isPresent()){
+            throw new RuntimeException("Requested category not found : " + category);
+        }
+        return  cat.get();
+    }
+
+    private UnitOfMeasure getUnit(String uomName) {
+        Optional<UnitOfMeasure> uom = uomRepository.findByDescription(uomName);
+        if(!uom.isPresent()){
+            throw new RuntimeException("Expected Unit of measure not found for " + uomName);
+        }
+        return uom.get();
     }
 
     private Recipe getGuacamoleRecipe() {
@@ -144,11 +181,4 @@ public class DataLoader implements CommandLineRunner {
         return sgc;
     }
 
-    private Ingredient getIngredient(String s, BigDecimal i, String unit) {
-        Ingredient ingredient = new Ingredient();
-        ingredient.setDescription(s);
-        ingredient.setAmount(i);
-        ingredient.setUom(uomRepository.findByDescription(unit).get());
-        return ingredient;
-    }
 }
