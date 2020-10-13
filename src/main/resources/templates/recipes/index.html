@@ -2,24 +2,77 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Spring Framework Guru</title>
+    <title>Recipes</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
+          crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">-->
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+            integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+            crossorigin="anonymous"></script>
 </head>
 <body>
-<h1>Recipes List</h1>
 
-<table id="recipes" class="table table-striped">
-    <tr>
-        <th>Recipe</th>
-        <th>Difficulty</th>
-        <th>Servings</th>
-        <th>PrepTime</th>
-        <th>Directions</th>
-    </tr>
-    <tr th:each="recipe : ${recipes}">
-        <td th:text="${recipe.description}">123</td>
-        <td th:text="${recipe.difficulty}">123</td>
-        <td th:text="${recipe.servings}">123</td>
-        <td th:text="${recipe.prepTime}">123</td>
-        <td th:text="${recipe.directions}"> Spring in Action</td>
-    </tr>
-</table>
+<div class="container-fluid" style="margin-top: 20px">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h1 class="panel-title">My Recipes!</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive" th:if="${not #lists.isEmpty(recipes)}">
+                        <table class="table table-hover">
+                            <thead class="thead-inverse">
+                            <tr>
+                                <th>Recipe</th>
+                                <th>Difficulty</th>
+                                <th>Servings</th>
+                                <th>PrepTime</th>
+                                <th>Directions</th>
+                            </tr>
+                            </thead>
+
+                            <tr th:remove="all">
+                                <td th:text="${recipe.description}">Id 1</td>
+                                <td th:text="${recipe.description}">Recipe 1</td>
+                                <td th:text="${recipe.description}">4</td>
+                                <td th:text="${recipe.description}">10 min</td>
+                                <td th:text="${recipe.description}">Do DO jka jalsd</td>
+                            </tr>
+                            <tr th:remove="all">
+                                <td th:text="${recipe.description}">Id 2</td>
+                                <td th:text="${recipe.description}">Recipe 2</td>
+                                <td th:text="${recipe.description}">3</td>
+                                <td th:text="${recipe.description}">90 min</td>
+                                <td th:text="${recipe.description}">Do DO jka jalsd</td>
+                            </tr>
+                            <tr th:remove="all">
+                                <td th:text="${recipe.description}">Id 3</td>
+                                <td th:text="${recipe.description}">Recipe 3</td>
+                                <td th:text="${recipe.description}">8</td>
+                                <td th:text="${recipe.description}">120 min</td>
+                                <td th:text="${recipe.description}">Do DO jka jalsd</td>
+                            </tr>
+
+                            <tr th:each="recipe : ${recipes}">
+                                <td th:text="${recipe.description}">123</td>
+                                <td th:text="${recipe.difficulty}">123</td>
+                                <td th:text="${recipe.servings}">123</td>
+                                <td th:text="${recipe.prepTime}">123</td>
+                                <td th:text="${recipe.directions}"> Spring in Action</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
