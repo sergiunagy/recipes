@@ -6,15 +6,16 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
           integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
-          crossorigin="anonymous">
+          crossorigin="anonymous" th:href="@{/webjars/bootstrap/3.4.1/css/bootstrap.min.css}">
 
+    <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
     <!-- Optional theme -->
     <!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">-->
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
             integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
-            crossorigin="anonymous"></script>
+            crossorigin="anonymous" th:src="@{/webjars/bootstrap/3.4.1/js/bootstrap.min.js}"></script>
 </head>
 <body>
 
@@ -31,41 +32,32 @@
                             <thead class="thead-inverse">
                             <tr>
                                 <th>Recipe</th>
-                                <th>Difficulty</th>
-                                <th>Servings</th>
-                                <th>PrepTime</th>
-                                <th>Directions</th>
+                                <th>Description</th>
+                                <th>Link</th>
                             </tr>
                             </thead>
 
                             <tr th:remove="all">
                                 <td th:text="${recipe.description}">Id 1</td>
                                 <td th:text="${recipe.description}">Recipe 1</td>
-                                <td th:text="${recipe.description}">4</td>
-                                <td th:text="${recipe.description}">10 min</td>
-                                <td th:text="${recipe.description}">Do DO jka jalsd</td>
+                                <td><a href="/recipe/show/">View</a></td>
                             </tr>
                             <tr th:remove="all">
                                 <td th:text="${recipe.description}">Id 2</td>
                                 <td th:text="${recipe.description}">Recipe 2</td>
-                                <td th:text="${recipe.description}">3</td>
-                                <td th:text="${recipe.description}">90 min</td>
-                                <td th:text="${recipe.description}">Do DO jka jalsd</td>
+                                <td><a href="/recipe/show/">View</a></td>
                             </tr>
                             <tr th:remove="all">
                                 <td th:text="${recipe.description}">Id 3</td>
                                 <td th:text="${recipe.description}">Recipe 3</td>
-                                <td th:text="${recipe.description}">8</td>
-                                <td th:text="${recipe.description}">120 min</td>
-                                <td th:text="${recipe.description}">Do DO jka jalsd</td>
+                                <td><a href="/recipe/show/">View</a></td>
                             </tr>
 
                             <tr th:each="recipe : ${recipes}">
+                                <td th:text="${recipe.id}">123</td>
                                 <td th:text="${recipe.description}">123</td>
-                                <td th:text="${recipe.difficulty}">123</td>
-                                <td th:text="${recipe.servings}">123</td>
-                                <td th:text="${recipe.prepTime}">123</td>
-                                <td th:text="${recipe.directions}"> Spring in Action</td>
+                                <td><a href="#" th:href="@{'/recipe/show/' + ${recipe.id}}"
+                                        th:text="${'Read ' + recipe.id}">View</a></td>
                             </tr>
                         </table>
                     </div>
