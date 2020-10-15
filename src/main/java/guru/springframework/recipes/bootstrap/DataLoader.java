@@ -158,13 +158,13 @@ https://stackoverflow.com/questions/54265552/different-ways-to-run-custom-code-b
 
     private Recipe getSpicyGrilledChickenRecipe() {
         Recipe sgc = new Recipe();
-        sgc.setCookTime(0);
+        sgc.setCookTime(8);
         sgc.setPrepTime(10);
-        sgc.setServings(4);
+        sgc.setServings(7);
         sgc.setUrl("https://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/");
         sgc.setDescription("Spicy Grilled Chicken Tacos");
-        sgc.setDifficulty(Difficulty.EASY);
-        sgc.setSource("");
+        sgc.setDifficulty(Difficulty.MODERATE);
+        sgc.setSource("The google");
         sgc.setDirections("1 Prepare a gas or charcoal grill for medium-high, direct heat.\n" +
                 "\n\n" +
                 "2 Make the marinade and coat the chicken: In a large bowl, stir together the chili powder, oregano, cumin, sugar, salt, garlic and orange zest. " +

@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Slf4j
 @Service
-public class RecipesServiceImpl implements RecipesService{
+public class RecipesServiceImpl implements RecipesService {
 
     private final RecipeRepository recipeRepository;
 
@@ -19,7 +19,7 @@ public class RecipesServiceImpl implements RecipesService{
         this.recipeRepository = recipeRepository;
     }
 
-    public Set<Recipe> getRecipes(){
+    public Set<Recipe> getRecipes() {
         /*Solution from course - create a local hashSet and return it. Unclear what benefits this has*/
         log.debug("In the service ..");
         Set<Recipe> rec = new HashSet<>();
@@ -27,5 +27,15 @@ public class RecipesServiceImpl implements RecipesService{
         return rec;
         /*My solution: use the HashSet returned by the repository*/
         //return recipeRepository.findAll();
+    }
+
+    public Recipe findById(Long id) {
+
+        Optional<Recipe> recipe = recipeRepository.findById(id);
+
+        if (!recipe.isPresent()) {
+            throw new RuntimeException("No recipe fiound with ID:" + id);
+        }
+        return recipe.get();
     }
 }

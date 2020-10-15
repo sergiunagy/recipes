@@ -1,9 +1,7 @@
 package guru.springframework.recipes.controllers;
 
 import guru.springframework.recipes.domain.Recipe;
-import guru.springframework.recipes.domain.repositories.RecipeRepository;
 import guru.springframework.recipes.services.RecipesService;
-import guru.springframework.recipes.services.RecipesServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -14,7 +12,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,9 +19,9 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class RecipesControllerTest {
+class IndexControllerTest {
 
-    RecipesController recipesController;
+    IndexController indexController;
 
     @Mock
     RecipesService recipesService;
@@ -36,16 +33,16 @@ class RecipesControllerTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        recipesController=new RecipesController(recipesService);
+        indexController =new IndexController(recipesService);
     }
 
     @Test
     void testMocMVC() throws Exception{
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipesController).build();
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
 
-        mockMvc.perform(get("/recipes"))
+        mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("recipes/index"));
+                .andExpect(view().name("index"));
     }
 
     @Test
@@ -59,7 +56,7 @@ class RecipesControllerTest {
         // program mock return
         when(recipesService.getRecipes()).thenReturn(recipes);
         // when - trigger action
-        recipesController.getRecipes(model);
+        indexController.getRecipes(model);
 
         ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
 
@@ -71,7 +68,7 @@ class RecipesControllerTest {
         // assert get recipes is called once
         verify(recipesService, times(1)).getRecipes();
         // assert the correct string is returned
-        assertEquals("recipes/index", recipesController.getRecipes(model));
+        assertEquals("index", indexController.getRecipes(model));
 
 
     }
