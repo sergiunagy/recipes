@@ -1,6 +1,5 @@
 package guru.springframework.recipes;
 
-import guru.springframework.recipes.controllers.Obsolete_IndexController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
