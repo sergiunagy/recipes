@@ -1,9 +1,13 @@
 package guru.springframework.recipes.services;
 
+import guru.springframework.recipes.commands.RecipeCommand;
+import guru.springframework.recipes.converters.RecipeCommandToRecipe;
+import guru.springframework.recipes.converters.RecipeToRecipeCommand;
 import guru.springframework.recipes.domain.Recipe;
 import guru.springframework.recipes.domain.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -14,9 +18,13 @@ import java.util.Set;
 public class RecipesServiceImpl implements RecipesService {
 
     private final RecipeRepository recipeRepository;
+    private final RecipeCommandToRecipe recipeCommandToRecipe;
+    private final RecipeToRecipeCommand recipeToRecipeCommand;
 
-    public RecipesServiceImpl(RecipeRepository recipeRepository) {
+    public RecipesServiceImpl(RecipeRepository recipeRepository, RecipeCommandToRecipe recipeCommandToRecipe, RecipeToRecipeCommand recipeToRecipeCommand) {
         this.recipeRepository = recipeRepository;
+        this.recipeCommandToRecipe = recipeCommandToRecipe;
+        this.recipeToRecipeCommand = recipeToRecipeCommand;
     }
 
     public Set<Recipe> getRecipes() {
@@ -37,5 +45,15 @@ public class RecipesServiceImpl implements RecipesService {
             throw new RuntimeException("No recipe fiound with ID:" + id);
         }
         return recipe.get();
+    }
+
+    @Override
+    @Transactional
+    public RecipeCommand saveRecipeCommand(RecipeCommand command) {
+        Recipe detachedRecipe = recipeCommandToRecipe.convert(command);
+
+        Recipe savedRecipe = recipeRepository.save(detachedRecipe);
+        log.debug("Saved RecipeId:" + savedRecipe.getId());
+        return recipeToRecipeCommand.convert(savedRecipe);
     }
 }
