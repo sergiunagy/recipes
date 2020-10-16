@@ -18,13 +18,13 @@ import java.util.Set;
 public class RecipesServiceImpl implements RecipesService {
 
     private final RecipeRepository recipeRepository;
-    private final RecipeCommandToRecipe recipeCommandToRecipe;
-    private final RecipeToRecipeCommand recipeToRecipeCommand;
+    private final RecipeCommandToRecipe obsRecipeCommandToRecipe;
+    private final RecipeToRecipeCommand obsRecipeToRecipeCommand;
 
-    public RecipesServiceImpl(RecipeRepository recipeRepository, RecipeCommandToRecipe recipeCommandToRecipe, RecipeToRecipeCommand recipeToRecipeCommand) {
+    public RecipesServiceImpl(RecipeRepository recipeRepository, RecipeCommandToRecipe obsRecipeCommandToRecipe, RecipeToRecipeCommand obsRecipeToRecipeCommand) {
         this.recipeRepository = recipeRepository;
-        this.recipeCommandToRecipe = recipeCommandToRecipe;
-        this.recipeToRecipeCommand = recipeToRecipeCommand;
+        this.obsRecipeCommandToRecipe = obsRecipeCommandToRecipe;
+        this.obsRecipeToRecipeCommand = obsRecipeToRecipeCommand;
     }
 
     public Set<Recipe> getRecipes() {
@@ -50,10 +50,10 @@ public class RecipesServiceImpl implements RecipesService {
     @Override
     @Transactional
     public RecipeCommand saveRecipeCommand(RecipeCommand command) {
-        Recipe detachedRecipe = recipeCommandToRecipe.convert(command);
+        Recipe detachedRecipe = obsRecipeCommandToRecipe.convert(command);
 
         Recipe savedRecipe = recipeRepository.save(detachedRecipe);
         log.debug("Saved RecipeId:" + savedRecipe.getId());
-        return recipeToRecipeCommand.convert(savedRecipe);
+        return obsRecipeToRecipeCommand.convert(savedRecipe);
     }
 }

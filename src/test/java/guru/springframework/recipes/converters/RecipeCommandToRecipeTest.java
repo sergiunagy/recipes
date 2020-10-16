@@ -9,10 +9,12 @@ import guru.springframework.recipes.domain.Recipe;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-
-public class RecipeCommandToRecipeTest {
+class RecipeCommandToRecipeTest {
     public static final Long RECIPE_ID = 1L;
     public static final Integer COOK_TIME = Integer.valueOf("5");
     public static final Integer PREP_TIME = Integer.valueOf("7");
@@ -23,23 +25,25 @@ public class RecipeCommandToRecipeTest {
     public static final String SOURCE = "Source";
     public static final String URL = "Some URL";
     public static final Long CAT_ID_1 = 1L;
-    public static final Long CAT_ID2 = 2L;
+    public static final Long CAT_ID_2 = 2L;
     public static final Long INGRED_ID_1 = 3L;
     public static final Long INGRED_ID_2 = 4L;
     public static final Long NOTES_ID = 9L;
 
     RecipeCommandToRecipe converter;
 
-
     @BeforeEach
-    public void setUp() throws Exception {
-        converter = new RecipeCommandToRecipe(new CategoryCommandToCategory(),
-                new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure()),
-                new NotesCommandToNotes());
+    void setUp() {
+        converter = RecipeCommandToRecipe.builder()
+                .categoryCommandToCategory(new CategoryCommandToCategory())
+                .ingredientCommandToIngredient(new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure()))
+                .notesCommandToNotes(new NotesCommandToNotes())
+                .build();
     }
 
     @Test
-    public void testNullObject() throws Exception {
+    void convert_null_source() {
+
         assertNull(converter.convert(null));
     }
 
@@ -51,43 +55,33 @@ public class RecipeCommandToRecipeTest {
     @Test
     public void convert() throws Exception {
         //given
-        RecipeCommand recipeCommand = new RecipeCommand();
-        recipeCommand.setId(RECIPE_ID);
-        recipeCommand.setCookTime(COOK_TIME);
-        recipeCommand.setPrepTime(PREP_TIME);
-        recipeCommand.setDescription(DESCRIPTION);
-        recipeCommand.setDifficulty(DIFFICULTY);
-        recipeCommand.setDirections(DIRECTIONS);
-        recipeCommand.setServings(SERVINGS);
-        recipeCommand.setSource(SOURCE);
-        recipeCommand.setUrl(URL);
+        Set<IngredientCommand> ingredients = new HashSet<>();
+        ingredients.add(new IngredientCommand().builder().id(INGRED_ID_1).build());
+        ingredients.add(new IngredientCommand().builder().id(INGRED_ID_2).build());
 
-        NotesCommand notes = new NotesCommand();
-        notes.setId(NOTES_ID);
+        Set<CategoryCommand> categories = new HashSet<>();
+        categories.add(new CategoryCommand().builder().id(CAT_ID_1).build());
+        categories.add(new CategoryCommand().builder().id(CAT_ID_2).build());
 
-        recipeCommand.setNotes(notes);
-
-        CategoryCommand category = new CategoryCommand();
-        category.setId(CAT_ID_1);
-
-        CategoryCommand category2 = new CategoryCommand();
-        category2.setId(CAT_ID2);
-
-        recipeCommand.getCategories().add(category);
-        recipeCommand.getCategories().add(category2);
-
-        IngredientCommand ingredient = new IngredientCommand();
-        ingredient.setId(INGRED_ID_1);
-
-        IngredientCommand ingredient2 = new IngredientCommand();
-        ingredient2.setId(INGRED_ID_2);
-
-        recipeCommand.getIngredients().add(ingredient);
-        recipeCommand.getIngredients().add(ingredient2);
+        RecipeCommand recipeCommand = RecipeCommand.builder()
+                .id(RECIPE_ID)
+                .cookTime(COOK_TIME)
+                .prepTime(PREP_TIME)
+                .description(DESCRIPTION)
+                .difficulty(DIFFICULTY)
+                .directions(DIRECTIONS)
+                .servings(SERVINGS)
+                .source(SOURCE)
+                .url(URL)
+                .notes(new NotesCommand().builder().id(NOTES_ID).build())
+                .ingredients(ingredients)
+                .categories(categories)
+                .build();
 
         //when
-        Recipe recipe  = converter.convert(recipeCommand);
+        Recipe recipe = converter.convert(recipeCommand);
 
+        //assert
         assertNotNull(recipe);
         assertEquals(RECIPE_ID, recipe.getId());
         assertEquals(COOK_TIME, recipe.getCookTime());

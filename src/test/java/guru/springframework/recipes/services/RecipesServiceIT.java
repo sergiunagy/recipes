@@ -12,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -32,10 +31,10 @@ public class RecipesServiceIT {
     RecipeRepository recipeRepository;
 
     @Autowired
-    RecipeCommandToRecipe recipeCommandToRecipe;
+    RecipeCommandToRecipe obsRecipeCommandToRecipe;
 
     @Autowired
-    RecipeToRecipeCommand recipeToRecipeCommand;
+    RecipeToRecipeCommand obsRecipeToRecipeCommand;
 
     @Transactional
     @Test
@@ -43,7 +42,7 @@ public class RecipesServiceIT {
         //given
         Iterable<Recipe> recipes = recipeRepository.findAll();
         Recipe testRecipe = recipes.iterator().next();
-        RecipeCommand testRecipeCommand = recipeToRecipeCommand.convert(testRecipe);
+        RecipeCommand testRecipeCommand = obsRecipeToRecipeCommand.convert(testRecipe);
 
         //when
         testRecipeCommand.setDescription(NEW_DESCRIPTION);

@@ -1,14 +1,24 @@
 package guru.springframework.recipes.converters;
 
+import guru.springframework.recipes.commands.CategoryCommand;
+import guru.springframework.recipes.commands.IngredientCommand;
+import guru.springframework.recipes.commands.NotesCommand;
 import guru.springframework.recipes.commands.RecipeCommand;
 import guru.springframework.recipes.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RecipeToRecipeCommandTest {
-
+@ExtendWith(SpringExtension.class)
+class RecipeToRecipeCommandTest {
     public static final Long RECIPE_ID = 1L;
     public static final Integer COOK_TIME = Integer.valueOf("5");
     public static final Integer PREP_TIME = Integer.valueOf("7");
@@ -19,85 +29,63 @@ public class RecipeToRecipeCommandTest {
     public static final String SOURCE = "Source";
     public static final String URL = "Some URL";
     public static final Long CAT_ID_1 = 1L;
-    public static final Long CAT_ID2 = 2L;
+    public static final Long CAT_ID_2 = 2L;
     public static final Long INGRED_ID_1 = 3L;
     public static final Long INGRED_ID_2 = 4L;
     public static final Long NOTES_ID = 9L;
+
+    @Mock
+    CategoryToCategoryCommand categoryToCategoryCommand;
+
+    @Mock
+    IngredientToIngredientCommand ingredientToIngredientCommand;
+
+    @Mock
+    NotesToNotesCommand notesToNotesCommand;
+
+    @InjectMocks
     RecipeToRecipeCommand converter;
 
     @BeforeEach
-    public void setUp() throws Exception {
-        converter = new RecipeToRecipeCommand(
-                new CategoryToCategoryCommand(),
-                new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand()),
-                new NotesToNotesCommand());
+    void setUp() {
+        // test if constructor still needed since we inject the mocks
     }
 
+        
     @Test
-    public void testNullObject() throws Exception {
+    void convertNullSource() {
+
         assertNull(converter.convert(null));
-    }
-
+    }   
+    
     @Test
-    public void testEmptyObject() throws Exception {
+    void convertEmptySource() {
         assertNotNull(converter.convert(new Recipe()));
     }
 
     @Test
-    public void convert() throws Exception {
-        //given
-        Recipe recipe = new Recipe();
-        recipe.setId(RECIPE_ID);
-        recipe.setCookTime(COOK_TIME);
-        recipe.setPrepTime(PREP_TIME);
-        recipe.setDescription(DESCRIPTION);
-        recipe.setDifficulty(DIFFICULTY);
-        recipe.setDirections(DIRECTIONS);
-        recipe.setServings(SERVINGS);
-        recipe.setSource(SOURCE);
-        recipe.setUrl(URL);
+    void convert() {
+        Set<Ingredient> ingredients = new HashSet<>();
+        ingredients.add(new Ingredient().builder().id(INGRED_ID_1).build());
+        ingredients.add(new Ingredient().builder().id(INGRED_ID_2).build());
 
-        Notes notes = new Notes();
-        notes.setId(NOTES_ID);
+        Set<Category> categories = new HashSet<>();
+        categories.add(new Category().builder().id(CAT_ID_1).build());
+        categories.add(new Category().builder().id(CAT_ID_2).build());
 
-        recipe.setNotes(notes);
-
-        Category category = new Category();
-        category.setId(CAT_ID_1);
-
-        Category category2 = new Category();
-        category2.setId(CAT_ID2);
-
-        recipe.getCategories().add(category);
-        recipe.getCategories().add(category2);
-
-        Ingredient ingredient = new Ingredient();
-        ingredient.setId(INGRED_ID_1);
-
-        Ingredient ingredient2 = new Ingredient();
-        ingredient2.setId(INGRED_ID_2);
-
-        recipe.getIngredients().add(ingredient);
-        recipe.getIngredients().add(ingredient2);
-
-        //when
-        RecipeCommand command = converter.convert(recipe);
-
-        //then
-        assertNotNull(command);
-        assertEquals(RECIPE_ID, command.getId());
-        assertEquals(COOK_TIME, command.getCookTime());
-        assertEquals(PREP_TIME, command.getPrepTime());
-        assertEquals(DESCRIPTION, command.getDescription());
-        assertEquals(DIFFICULTY, command.getDifficulty());
-        assertEquals(DIRECTIONS, command.getDirections());
-        assertEquals(SERVINGS, command.getServings());
-        assertEquals(SOURCE, command.getSource());
-        assertEquals(URL, command.getUrl());
-        assertEquals(NOTES_ID, command.getNotes().getId());
-        assertEquals(2, command.getCategories().size());
-        assertEquals(2, command.getIngredients().size());
-
+        Recipe recipeCommand = Recipe.builder()
+                .id(RECIPE_ID)
+                .cookTime(COOK_TIME)
+                .prepTime(PREP_TIME)
+                .description(DESCRIPTION)
+                .difficulty(DIFFICULTY)
+                .directions(DIRECTIONS)
+                .servings(SERVINGS)
+                .source(SOURCE)
+                .url(URL)
+                .notes(new Notes().builder().id(NOTES_ID).build())
+                .ingredients(ingredients)
+                .categories(categories)
+                .build();
     }
-
 }
