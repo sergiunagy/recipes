@@ -15,7 +15,7 @@ public class IngredientCommand {
     private Long id;
     private String description;
     private BigDecimal amount;
-    private UnitOfMeasureCommand unitOfMeasure;
+    private UnitOfMeasureCommand uom;
 
     public static IngredientCommandBuilder builder() {
         return new IngredientCommandBuilder();
@@ -25,7 +25,7 @@ public class IngredientCommand {
         private Long id;
         private String description;
         private BigDecimal amount;
-        private UnitOfMeasureCommand unitOfMeasure;
+        private UnitOfMeasureCommand uom;
 
         IngredientCommandBuilder() {
         }
@@ -46,16 +46,16 @@ public class IngredientCommand {
         }
 
         public IngredientCommandBuilder unitOfMeasure(UnitOfMeasureCommand unitOfMeasure) {
-            this.unitOfMeasure = unitOfMeasure;
+            this.uom = unitOfMeasure;
             return this;
         }
 
         public IngredientCommand build() {
-            return new IngredientCommand(id, description, amount, unitOfMeasure);
+            return new IngredientCommand(id, description, amount, uom);
         }
 
         public String toString() {
-            return "IngredientCommand.IngredientCommandBuilder(id=" + this.id + ", description=" + this.description + ", amount=" + this.amount + ", unitOfMeasure=" + this.unitOfMeasure + ")";
+            return "IngredientCommand.IngredientCommandBuilder(id=" + this.id + ", description=" + this.description + ", amount=" + this.amount + ", unitOfMeasure=" + this.uom + ")";
         }
     }
 }

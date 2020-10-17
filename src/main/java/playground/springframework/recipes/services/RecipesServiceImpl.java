@@ -18,13 +18,13 @@ import java.util.Set;
 public class RecipesServiceImpl implements RecipesService {
 
     private final RecipeRepository recipeRepository;
-    private final RecipeCommandToRecipe obsRecipeCommandToRecipe;
-    private final RecipeToRecipeCommand obsRecipeToRecipeCommand;
+    private final RecipeCommandToRecipe recipeCommandToRecipe;
+    private final RecipeToRecipeCommand recipeToRecipeCommand;
 
-    public RecipesServiceImpl(RecipeRepository recipeRepository, RecipeCommandToRecipe obsRecipeCommandToRecipe, RecipeToRecipeCommand obsRecipeToRecipeCommand) {
+    public RecipesServiceImpl(RecipeRepository recipeRepository, RecipeCommandToRecipe RecipeCommandToRecipe, RecipeToRecipeCommand recipeToRecipeCommand) {
         this.recipeRepository = recipeRepository;
-        this.obsRecipeCommandToRecipe = obsRecipeCommandToRecipe;
-        this.obsRecipeToRecipeCommand = obsRecipeToRecipeCommand;
+        this.recipeCommandToRecipe = RecipeCommandToRecipe;
+        this.recipeToRecipeCommand = recipeToRecipeCommand;
     }
 
     public Set<Recipe> getRecipes() {
@@ -50,10 +50,19 @@ public class RecipesServiceImpl implements RecipesService {
     @Override
     @Transactional
     public RecipeCommand saveRecipeCommand(RecipeCommand command) {
-        Recipe detachedRecipe = obsRecipeCommandToRecipe.convert(command);
+        Recipe detachedRecipe = recipeCommandToRecipe.convert(command);
 
         Recipe savedRecipe = recipeRepository.save(detachedRecipe);
         log.debug("Saved RecipeId:" + savedRecipe.getId());
-        return obsRecipeToRecipeCommand.convert(savedRecipe);
+        return recipeToRecipeCommand.convert(savedRecipe);
+    }
+
+    @Override
+    @Transactional
+    public RecipeCommand findRecipeCommandById(Long id){
+
+        Optional<Recipe> recipeOptional = recipeRepository.findById(id);
+
+        return recipeToRecipeCommand.convert(recipeOptional.get());
     }
 }

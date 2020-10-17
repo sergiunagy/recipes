@@ -13,4 +13,6 @@ public interface RecipesService {
 
     @Transactional
     RecipeCommand saveRecipeCommand(RecipeCommand command);
+
+    public RecipeCommand findRecipeCommandById(Long id);
 }

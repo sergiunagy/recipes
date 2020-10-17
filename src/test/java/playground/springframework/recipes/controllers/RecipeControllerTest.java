@@ -1,5 +1,6 @@
 package playground.springframework.recipes.controllers;
 
+import org.springframework.http.MediaType;
 import playground.springframework.recipes.commands.CategoryCommand;
 import playground.springframework.recipes.commands.IngredientCommand;
 import playground.springframework.recipes.commands.NotesCommand;
@@ -28,10 +29,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 class RecipeControllerTest {
 
-    public static final Long RECIPE_ID = 1L;
+    public static final Long RECIPE_ID = Long.valueOf(255L);
     public static final Integer COOK_TIME = Integer.valueOf("5");
     public static final Integer PREP_TIME = Integer.valueOf("7");
-    public static final String DESCRIPTION = "My Recipe";
+    public static final String DESCRIPTION = "My Recipe -test create";
     public static final String DIRECTIONS = "Directions";
     public static final Difficulty DIFFICULTY = Difficulty.EASY;
     public static final Integer SERVINGS = Integer.valueOf("3");
@@ -42,6 +43,8 @@ class RecipeControllerTest {
     public static final Long INGRED_ID_1 = 3L;
     public static final Long INGRED_ID_2 = 4L;
     public static final Long NOTES_ID = 9L;
+
+    RecipeCommand recipeCommand;
 
     @InjectMocks
     RecipeController controller;
@@ -54,6 +57,7 @@ class RecipeControllerTest {
     @BeforeEach
     void setUp() {
         mvc = MockMvcBuilders.standaloneSetup(controller).build();
+        createDummyCommandObject();
     }
 
     @Test
@@ -63,7 +67,7 @@ class RecipeControllerTest {
 
         when(recipesService.findById(anyLong())).thenReturn(recipe);
 
-        mvc.perform(get("/recipe/show/1"))
+        mvc.perform(get("/recipe/1/show"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipes/show"))
                 .andExpect(model().attributeExists("recipe"));
@@ -71,6 +75,8 @@ class RecipeControllerTest {
 
     @Test
     void newRecipe() throws Exception {
+
+        RecipeCommand command = RecipeCommand.builder().id(2L).build();
 
         mvc.perform(get("/recipe/new"))
                 .andExpect(status().isOk())
@@ -80,9 +86,40 @@ class RecipeControllerTest {
 
 
     @Test
-    void saveOrUpdate() throws Exception{
+    void saveNewRecipe() throws Exception{
 
-        //given
+        // given
+        // generic dummy command object
+
+        when(recipesService.saveRecipeCommand(any(RecipeCommand.class))).thenReturn(recipeCommand);
+
+        mvc.perform(post("/recipe" )
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("id","")
+                .param("description","Some string")
+        )
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/recipe/" +recipeCommand.getId()+ "/show"));
+
+    }
+
+    @Test
+    void updateRecipe() throws Exception{
+        // given
+        // generic dummy command object
+
+        //when-then
+        when(recipesService.findRecipeCommandById(anyLong())).thenReturn(recipeCommand);
+
+        mvc.perform(get("/recipe/" + recipeCommand.getId() + "/update"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("recipe"))
+                .andExpect(view().name("recipes/recipeform"));
+        //expect
+
+    }
+
+    private void createDummyCommandObject() {
         Set<IngredientCommand> ingredients = new HashSet<>();
         ingredients.add(new IngredientCommand().builder().id(INGRED_ID_1).build());
         ingredients.add(new IngredientCommand().builder().id(INGRED_ID_2).build());
@@ -91,7 +128,7 @@ class RecipeControllerTest {
         categories.add(new CategoryCommand().builder().id(CAT_ID_1).build());
         categories.add(new CategoryCommand().builder().id(CAT_ID_2).build());
 
-        RecipeCommand recipeCommand = RecipeCommand.builder()
+        recipeCommand = RecipeCommand.builder()
                 .id(RECIPE_ID)
                 .cookTime(COOK_TIME)
                 .prepTime(PREP_TIME)
@@ -105,15 +142,6 @@ class RecipeControllerTest {
                 .ingredients(ingredients)
                 .categories(categories)
                 .build();
-
-        when(recipesService.saveRecipeCommand(any(RecipeCommand.class))).thenReturn(recipeCommand);
-
-        mvc.perform(post("/recipe/" ))
-                .andExpect(status().is(302))
-                .andExpect(view().name("redirect:/recipe/show/"+recipeCommand.getId()));
-
-       // verify(recipesService.saveRecipeCommand(any()), times(1));
-
-
     }
+
 }
