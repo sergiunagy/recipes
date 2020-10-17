@@ -1,5 +1,8 @@
 package playground.springframework.recipes.controllers;
 
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import playground.springframework.recipes.commands.RecipeCommand;
 import playground.springframework.recipes.services.RecipesService;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,5 +32,21 @@ public class RecipeController {
         model.addAttribute("recipe", recipesService.findById(new Long(id)));
 
         return ("recipes/show");
+    }
+
+    @RequestMapping("recipe/new")
+    public String newRecipe(Model model){
+
+        model.addAttribute("recipe", new RecipeCommand());
+        return "recipes/recipeform";
+    }
+
+
+    @PostMapping("recipe")
+    public String saveOrUpdate(@ModelAttribute RecipeCommand commands){
+
+        RecipeCommand command = recipesService.saveRecipeCommand(commands);
+
+        return "redirect:/recipe/show/" + command.getId();
     }
 }
