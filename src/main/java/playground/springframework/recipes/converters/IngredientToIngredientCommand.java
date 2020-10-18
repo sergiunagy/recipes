@@ -1,5 +1,7 @@
 package playground.springframework.recipes.converters;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import playground.springframework.recipes.commands.IngredientCommand;
 import playground.springframework.recipes.domain.Ingredient;
 import lombok.Synchronized;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Component;
 /**
  * Created by jt on 6/21/17.
  */
+@Slf4j
+@Getter
 @Component
 public class IngredientToIngredientCommand implements Converter<Ingredient, IngredientCommand> {
 
@@ -23,15 +27,20 @@ public class IngredientToIngredientCommand implements Converter<Ingredient, Ingr
     @Nullable
     @Override
     public IngredientCommand convert(Ingredient ingredient) {
-        if (ingredient == null) {
+        log.debug("In converter:" + ingredient);
+         if (ingredient == null) {
+             log.debug("Converter received null");
             return null;
         }
 
-        IngredientCommand ingredientCommand = new IngredientCommand();
-        ingredientCommand.setId(ingredient.getId());
-        ingredientCommand.setAmount(ingredient.getAmount());
-        ingredientCommand.setDescription(ingredient.getDescription());
-        ingredientCommand.setUom(uomConverter.convert(ingredient.getUom()));
+        IngredientCommand ingredientCommand = IngredientCommand.builder()
+                .id(ingredient.getId())
+                .recipeId((ingredient.getRecipe()!=null)?ingredient.getRecipe().getId():null)
+                .description(ingredient.getDescription())
+                .amount(ingredient.getAmount())
+                .uom(uomConverter.convert(ingredient.getUom()))
+                .build();
+
         return ingredientCommand;
     }
 }
