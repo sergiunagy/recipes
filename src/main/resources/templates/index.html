@@ -36,6 +36,7 @@
                                 <th>Description</th>
                                 <th>Link</th>
                                 <th>Update</th>
+                                <th>Remove</th>
                             </tr>
                             </thead>
 
@@ -62,7 +63,8 @@
                                         th:text="${'View ' + recipe.id}">View</a></td>
                                 <td><a href="#" th:href="@{'/recipe/'+ ${recipe.id}+'/update'}"
                                         th:text="${'Update ' + recipe.id}">Update</a></td>
-
+                                <td><a href="#" th:href="@{'/recipe/'+ ${recipe.id}+'/delete'}"
+                                       th:text="${'Delete'}">Delete</a></td>
                             </tr>
                         </table>
                     </div>

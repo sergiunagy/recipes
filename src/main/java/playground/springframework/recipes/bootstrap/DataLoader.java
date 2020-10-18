@@ -78,7 +78,7 @@ https://stackoverflow.com/questions/54265552/different-ways-to-run-custom-code-b
 
         /*persist the recipe*/
         recipeRepository.save(guacamole);
-        log.debug("Saving recipe: " + guacamole.toString());
+        log.debug("Saving recipe: guacamole.." );
 
 
         /*********** create Recipe 2 *************************************/

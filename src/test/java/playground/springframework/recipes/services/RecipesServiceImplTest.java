@@ -64,4 +64,17 @@ class RecipesServiceImplTest {
         assertEquals(testId, recipe.getId());
 
     }
+
+    @Test
+    void deleteById() {
+        // given
+        Long idToDelete = 1L;
+
+        // when
+        recipesService.deleteById(idToDelete);
+
+        // No when because mathod has void return type
+        // then
+        verify(recipeRepository, times(1)).deleteById(anyLong());
+    }
 }

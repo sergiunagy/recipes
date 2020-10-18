@@ -119,6 +119,16 @@ class RecipeControllerTest {
 
     }
 
+    @Test
+    public void deleteById() throws Exception{
+
+        mvc.perform(get("/recipe/1/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/"));
+
+        verify(recipesService, times(1)).deleteById(anyLong());
+    }
+
     private void createDummyCommandObject() {
         Set<IngredientCommand> ingredients = new HashSet<>();
         ingredients.add(new IngredientCommand().builder().id(INGRED_ID_1).build());
