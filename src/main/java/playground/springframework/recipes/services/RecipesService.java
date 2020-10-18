@@ -1,6 +1,7 @@
 package playground.springframework.recipes.services;
 
 import playground.springframework.recipes.commands.RecipeCommand;
+import playground.springframework.recipes.domain.Ingredient;
 import playground.springframework.recipes.domain.Recipe;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,4 +18,5 @@ public interface RecipesService {
     public RecipeCommand findRecipeCommandById(Long id);
 
     public void deleteById(Long id);
+
 }
