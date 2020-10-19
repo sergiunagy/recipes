@@ -5,11 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import playground.springframework.recipes.commands.IngredientCommand;
+import playground.springframework.recipes.converters.IngredientCommandToIngredient;
 import playground.springframework.recipes.converters.IngredientToIngredientCommand;
+import playground.springframework.recipes.converters.UnitOfMeasureCommandToUnitOfMeasure;
 import playground.springframework.recipes.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import playground.springframework.recipes.domain.Ingredient;
 import playground.springframework.recipes.domain.Recipe;
 import playground.springframework.recipes.domain.repositories.RecipeRepository;
+import playground.springframework.recipes.domain.repositories.UnitOfMeasureRepository;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -21,31 +24,38 @@ import static org.mockito.Mockito.*;
 
 class IngredientsServiceIT {
 
-    IngredientToIngredientCommand ingredientToIngredientCommand;
+    private final IngredientToIngredientCommand ingredientToIngredientCommand;
+    private final IngredientCommandToIngredient ingredientCommandToIngredient;
 
     @Mock
     RecipeRepository recipeRepository;
 
-    IngredientsService ingredientsService;
-
+    @Mock
+    UnitOfMeasureRepository unitOfMeasureRepository;
 
     IngredientCommand ingredientCommand;
 
+    IngredientsService ingredientsService;
 
     public IngredientsServiceIT() {
         ingredientToIngredientCommand = new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand());
+        ingredientCommandToIngredient = new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure());
     }
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        ingredientsService = new IngredientsServiceImpl(recipeRepository, ingredientToIngredientCommand);
-
         ingredientCommand = IngredientCommand.builder()
                 .id(255L)
                 .description("Test")
                 .build();
+
+        ingredientsService = new IngredientsServiceImpl(
+                recipeRepository,
+                unitOfMeasureRepository,
+                ingredientToIngredientCommand,
+                ingredientCommandToIngredient);
     }
 
     @Test

@@ -36,6 +36,7 @@ class IngredientsServiceImplTest {
     @InjectMocks
     IngredientsServiceImpl ingredientsService;
 
+
     IngredientCommand ingredientCommand;
 
     @BeforeEach

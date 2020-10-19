@@ -21,6 +21,7 @@ import playground.springframework.recipes.commands.RecipeCommand;
 import playground.springframework.recipes.domain.Difficulty;
 import playground.springframework.recipes.services.IngredientsService;
 import playground.springframework.recipes.services.RecipesService;
+import playground.springframework.recipes.services.UnitOfMeasureService;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -46,6 +47,9 @@ class IngredientControllerTest {
 
     @Mock
     IngredientsService ingredientsService;
+
+    @Mock
+    UnitOfMeasureService unitOfMeasureService;
 
     @InjectMocks
     IngredientController controller;
